@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 13.75, 15.75" name="DB">
+  <DataContextMoniker Name="/DBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="eac9573a-0143-44fd-871d-21bb287eea34" absoluteBounds="0.75, 0.75, 2, 14.462791341145833">
+      <DataClassMoniker Name="/DBDataContext/CanBo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="af23f82e-972c-4286-b97a-38ac6b3530f2" absoluteBounds="0.765, 1.21, 1.9700000000000002, 13.902791341145832" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d0a3453f-5f62-4d81-9ff9-a065a086551e" absoluteBounds="3.75, 0.75, 2, 3.3093082682291666">
+      <DataClassMoniker Name="/DBDataContext/CanBoDang" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6f2be1e6-0305-49f1-8ac7-0fb8087961e3" absoluteBounds="3.765, 1.21, 1.9700000000000002, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="54fe64a9-719c-4496-863e-485f17f69e0d" absoluteBounds="3.75, 4.5, 2, 2.5401025390625005">
+      <DataClassMoniker Name="/DBDataContext/CanBoThamGiaQuanDoi" />
+      <nestedChildShapes>
+        <elementListCompartment Id="27b54607-81f0-4b1b-8a1e-34bafedf8316" absoluteBounds="3.765, 4.96, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a01e83ca-e1aa-4fe6-8878-4a0366caa2d8" absoluteBounds="6.5, 0.75, 2, 4.2708154296875">
+      <DataClassMoniker Name="/DBDataContext/CanBo_BangCap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8a7afb86-85fb-4784-8590-8a6e95f39b4e" absoluteBounds="6.5150000000000006, 1.21, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c6732a11-a2e4-4716-a300-403799bb90a8" absoluteBounds="6.5, 5.625, 2, 3.8862125651041666">
+      <DataClassMoniker Name="/DBDataContext/CanBo_ChungChi" />
+      <nestedChildShapes>
+        <elementListCompartment Id="993df135-d25b-43f6-8106-46e65bcc95ef" absoluteBounds="6.515, 6.085, 1.9700000000000002, 3.3262125651041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d6125a57-02c4-4a96-a6c8-90232f0da1ea" absoluteBounds="9, 0.75, 2, 4.6554182942708326">
+      <DataClassMoniker Name="/DBDataContext/CanBo_QuaTrinhCongTac" />
+      <nestedChildShapes>
+        <elementListCompartment Id="639488b2-af48-4d8a-8333-c1b9e5dc3923" absoluteBounds="9.015, 1.21, 1.9700000000000002, 4.095418294270833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="18f423f7-ac1a-4ea5-987f-79fef1a762e3" absoluteBounds="3.75, 7.5, 2, 2.9247054036458331">
+      <DataClassMoniker Name="/DBDataContext/CanBo_ThanNhan" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f1315d5d-2392-43c0-a52f-55290146f523" absoluteBounds="3.765, 7.96, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e0b6a03f-675f-43f4-b29d-7342096210e4" absoluteBounds="9, 5.875, 2, 9.2706526692708326">
+      <DataClassMoniker Name="/DBDataContext/CanBo_HopDongLaoDong" />
+      <nestedChildShapes>
+        <elementListCompartment Id="04df66be-46b6-4c5a-a138-222e525d2c27" absoluteBounds="9.015, 6.335, 1.9700000000000002, 8.7106526692708321" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3d8af316-a264-4104-88ae-c9165eb848a0" absoluteBounds="11.5, 0.75, 2, 3.1170068359375">
+      <DataClassMoniker Name="/DBDataContext/CanBo_DanhHieu" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0ec136f8-a7b6-4686-abd5-e29391dd110b" absoluteBounds="11.515, 1.21, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c6183352-423e-4e8b-9d68-a2fba417d072" absoluteBounds="3.75, 10.875, 2, 4.6554182942708326">
+      <DataClassMoniker Name="/DBDataContext/CanBo_KhenThuong" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e506958d-87e9-4b86-afdc-c34178bff0d1" absoluteBounds="3.765, 11.335, 1.9700000000000002, 4.095418294270833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8f4d9c47-d025-41d0-85e7-357beafadcb3" absoluteBounds="6.5, 10.375, 2, 4.0785139973958326">
+      <DataClassMoniker Name="/DBDataContext/CanBo_KyLuat" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1aad18f7-cbee-4215-a242-1d74656d5f70" absoluteBounds="6.515, 10.835, 1.9700000000000002, 3.518513997395833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3dd4040d-4300-45d6-8c09-1636a617307f" absoluteBounds="11.5, 4.375, 2, 5.8092268880208326">
+      <DataClassMoniker Name="/DBDataContext/CanBo_BienDongLuongCung" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0090f8a2-3118-4446-b1d7-05b4e6c21898" absoluteBounds="11.515, 4.835, 1.9700000000000002, 5.249226888020833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="254503b8-f2cb-4e42-bede-f9e7bc00ab4e" absoluteBounds="11.5, 10.625, 2, 3.1170068359375">
+      <DataClassMoniker Name="/DBDataContext/CanBo_BienDongLuongChucDanh" />
+      <nestedChildShapes>
+        <elementListCompartment Id="dcaf8485-db9e-4f54-b1dc-231262fdf37f" absoluteBounds="11.515, 11.085, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
