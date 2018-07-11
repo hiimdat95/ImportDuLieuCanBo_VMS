@@ -200,10 +200,11 @@ namespace ImportDuLieuCanBo_VMS
         {
             var id = 0;
 
-            var sql = string.Format("SELECT {0}_ID FROM FixedDM_{0} WHERE Ten{0} LIKE @Ten", loaiDanhMuc);
+            var sql = string.Format("SELECT {0}_ID FROM FixedDM_{0} WHERE Ten{0} LIKE N'{1}'", loaiDanhMuc,tenDanhMuc);
 
             err = "";
-            var data = SqlGet(sql, new SqlParameter[] { new SqlParameter("@Ten", tenDanhMuc) }, out err);
+            var data = SqlGet(sql, new SqlParameter[] { }, out err);
+            
 
             if (err == "")
             {
@@ -399,6 +400,15 @@ namespace ImportDuLieuCanBo_VMS
 
             btnStop.Enabled = false;
         }
+        public bool checkDigit(string s)
+        {
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (char.IsDigit(s[i]) == true)
+                    return true;
+            }
+            return false;
+        }
 
         private void importWorker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -437,59 +447,98 @@ namespace ImportDuLieuCanBo_VMS
                 #region Import ThongTinCoBan
 
                 #region buildDuLieuImport
-
+                // Nếu có cán bộ rồi thì update thông tin giao tiếp
+                // Nếu chưa có thì thêm mới
+                // Không lấy ID cán bộ theo file excel mà dựa vào cột mã cán bộ. Từ đó lấy ra ID để lưu vào các bảng có quan hệ 1-n, trong trường hợp này là quá trình công tác
+                // 
                 sheet = workbook.Worksheets["ThongTinChung"];
                 cells = sheet.Cells;
 
                 importWorker.ReportProgress(0, new string[] { item.Text, "status-away.png", string.Format("Lấy dữ liệu ThongTinChung") });
                 var canbo = new Entities.CanBo();
-                for (int i = 4; i < sheet.Cells.MaxRow; i++)
-                {
-                    int j = 0;
-                    if (cells[i, j].Value + "" == "")
+                //for (int i = 4; i < sheet.Cells.MaxRow; i++)
+                //{
+                //    int j = 0;
+                    //if (cells[i, j].Value + "" == "")
+                    //{
+                    //    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Lỗi khi lấy dữ liệu ThongTinChung: Chưa nhập ID") });
+                    //    continue;
+                    //}
+                    if (cells["A6"].Value + "" == "")
                     {
                         importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Lỗi khi lấy dữ liệu ThongTinChung: Chưa nhập ID") });
                         continue;
                     }
-
                     try
                     {
-                        canbo.CanBo_ID = cells[i, j].StringValue;
+                        //canbo.CanBo_ID = cells[i, j].StringValue;
 
-                        canbo.MaCanBo = cells[i, j + 1].StringValue;
-                        canbo.MaThe = cells[i, j + 2].StringValue;
-                        canbo.ChiMucHoSoGoc = cells[i, j + 3].StringValue;
-                        canbo.HoDem = cells[i, j + 4].StringValue;
-                        canbo.Ten = cells[i, j + 5].StringValue;
-                        canbo.ChucVuKiemNhiem = cells[i, j + 6].StringValue;
-                        canbo.DienThoaiCQ = cells[i, j + 7].StringValue;
-                        canbo.DTDD = cells[i, j + 8].StringValue;
-                        canbo.Email = cells[i, j + 9].StringValue;
-                        canbo.SoTaiKhoan = cells[i, j + 10].StringValue;
-                        canbo.TenNganHang = cells[i, j + 11].StringValue;
-                        canbo.IDNganHang = GetDanhMuc_ID("NganHang", canbo.TenNganHang, out err);
-                        canbo.SoCMND = cells[i, j + 12].StringValue;
-                        canbo.NgayCapCMND = cells[i, j + 13].StringValue;
-                        canbo.NoiCapCMND = cells[i, j + 14].StringValue;
-                        canbo.HoVaTenKhaiSinh = canbo.HoDem + canbo.Ten;
-                        canbo.GioiTinh = cells[i, j + 15].StringValue.ToLower() == "1";
-                        canbo.NgaySinh = cells[i, j + 16].StringValue;
-                        canbo.NoiSinh = cells[i, j + 17].StringValue;
-                        canbo.QueQuan = cells[i, j + 18].StringValue;
-                        canbo.ThuongTru = cells[i, j + 19].StringValue;
-                        canbo.TamTru = cells[i, j + 20].StringValue;
-                        canbo.TenDanToc = cells[i, j + 21].StringValue;
+                        //canbo.MaCanBo = cells[i, j + 1].StringValue;
+                        //canbo.MaThe = cells[i, j + 2].StringValue;
+                        //canbo.ChiMucHoSoGoc = cells[i, j + 3].StringValue;
+                        //canbo.HoDem = cells[i, j + 4].StringValue;
+                        //canbo.Ten = cells[i, j + 5].StringValue;
+                        //canbo.ChucVuKiemNhiem = cells[i, j + 6].StringValue;
+                        //canbo.DienThoaiCQ = cells[i, j + 7].StringValue;
+                        //canbo.DTDD = cells[i, j + 8].StringValue;
+                        //canbo.Email = cells[i, j + 9].StringValue;
+                        //canbo.SoTaiKhoan = cells[i, j + 10].StringValue;
+                        //canbo.TenNganHang = cells[i, j + 11].StringValue;
+                        //canbo.IDNganHang = GetDanhMuc_ID("NganHang", canbo.TenNganHang, out err);
+                        //canbo.SoCMND = cells[i, j + 12].StringValue;
+                        //canbo.NgayCapCMND = cells[i, j + 13].StringValue;
+                        //canbo.NoiCapCMND = cells[i, j + 14].StringValue;
+                        //canbo.HoVaTenKhaiSinh = canbo.HoDem + canbo.Ten;
+                        //canbo.GioiTinh = cells[i, j + 15].StringValue.ToLower() == "1";
+                        //canbo.NgaySinh = cells[i, j + 16].StringValue;
+                        //canbo.NoiSinh = cells[i, j + 17].StringValue;
+                        //canbo.QueQuan = cells[i, j + 18].StringValue;
+                        //canbo.ThuongTru = cells[i, j + 19].StringValue;
+                        //canbo.TamTru = cells[i, j + 20].StringValue;
+                        //canbo.TenDanToc = cells[i, j + 21].StringValue;
+                        //canbo.ID_DanToc = GetDanhMuc_ID("DanToc", canbo.TenDanToc, out err);
+                        //canbo.TenTonGiao = cells[i, j + 22].StringValue;
+                        //canbo.ID_TonGiao = GetDanhMuc_ID("TonGiao", canbo.TenTonGiao, out err);
+                        //canbo.NgayVaoCongTy = cells[i, j + 23].StringValue;
+                        //canbo.NgayVaoNganh = cells[i, j + 25].StringValue;
+                        //canbo.NgayThoiViec = cells[i, j + 24].StringValue;
+                        //canbo.NgayVaoDang = cells[i, j + 26].StringValue;
+                        //canbo.TrinhDoVanHoa = cells[i, j + 27].StringValue;
+                        //canbo.TrinhDoDaoTaoChiTiet = cells[i, j + 27].StringValue;
+                        //canbo.TrinhDoTinHoc = cells[i, j +28].StringValue;
+                        //canbo.TinhTrangHonNhan = cells[i, j + 29].StringValue;
+
+
+
+                        canbo.CanBo_ID = cells["A6"].StringValue;
+                        canbo.MaCanBo = cells["C6"].StringValue;
+                        canbo.HoDem = cells["D6"].StringValue;
+                        canbo.Ten = cells["E6"].StringValue;
+                        canbo.GioiTinh = cells["F6"].StringValue.ToLower() == "Nam";
+                        canbo.NgaySinh = cells["G6"].StringValue;
+                        canbo.NoiSinh = cells["J6"].StringValue;
+                        canbo.QueQuan = cells["K6"].StringValue;
+                        canbo.ThuongTru = cells["L6"].StringValue;
+                        canbo.TamTru = cells["M6"].StringValue;
+                        canbo.DTDD = cells["N6"].StringValue;
+                        canbo.TenDanToc = cells["O6"].StringValue;
                         canbo.ID_DanToc = GetDanhMuc_ID("DanToc", canbo.TenDanToc, out err);
-                        canbo.TenTonGiao = cells[i, j + 22].StringValue;
+                        canbo.TenTonGiao = cells["P6"].StringValue;
                         canbo.ID_TonGiao = GetDanhMuc_ID("TonGiao", canbo.TenTonGiao, out err);
-                        canbo.NgayVaoCongTy = cells[i, j + 23].StringValue;
-                        canbo.NgayVaoNganh = cells[i, j + 25].StringValue;
-                        canbo.NgayThoiViec = cells[i, j + 24].StringValue;
-                        canbo.NgayVaoDang = cells[i, j + 26].StringValue;
-                        canbo.TrinhDoVanHoa = cells[i, j + 27].StringValue;
-                        canbo.TrinhDoDaoTaoChiTiet = cells[i, j + 27].StringValue;
-                        canbo.TrinhDoTinHoc = cells[i, j +28].StringValue;
-                        canbo.TinhTrangHonNhan = cells[i, j + 29].StringValue;
+                        canbo.NgayVaoCongTy = cells["Q6"].StringValue;
+                        canbo.SoCMND = cells["R6"].StringValue;
+                        canbo.NgayCapCMND = cells["S6"].StringValue;
+                        canbo.NoiCapCMND = cells["T6"].StringValue;
+                        canbo.NgayVaoDang = cells["U6"].StringValue;
+                        canbo.NgayNhapNgu = cells["V6"].StringValue;
+                        canbo.NgayXuatNgu = cells["W6"].StringValue;
+                        canbo.NhomMau = cells["AA6"].StringValue;
+
+
+
+
+
+
                     }
                     //catch (Exception ex)
                     //{
@@ -502,45 +551,68 @@ namespace ImportDuLieuCanBo_VMS
                     #region Thong Tin Giao Tiep
 
                     importWorker.ReportProgress(0, new string[] { item.Text, "status-away.png", string.Format("Lưu thông tin giao tiếp") });
-
-                    var ttCanBo = db.CanBos.FirstOrDefault(p => p.CanBo_ID == int.Parse(canbo.CanBo_ID));
+                    // ??? CHỗ này để lọc lấy ra Thông tin cán bộ (Đang dùng LInq)
+                    // Thay vì lấy theo ID thì phải lấy theo mã cán bộ. Biến đối tương tự cho phần cán bộ - quá trình công tác
+                    var ttCanBo = db.CanBos.FirstOrDefault(p => p.MaCanBo == canbo.MaCanBo);
                     try
                     {
-                        ttCanBo = new CanBo();
-                        ttCanBo.CanBo_ID = int.Parse(canbo.CanBo_ID);
+                        //ttCanBo = new CanBo();
+                        ////ttCanBo.CanBo_ID = int.Parse(canbo.CanBo_ID);
+                        //ttCanBo.MaCanBo = canbo.MaCanBo;
+                        //ttCanBo.MaThe = canbo.MaThe;
+                        //ttCanBo.ChiMucHoSoGoc = canbo.ChiMucHoSoGoc;
+                        //ttCanBo.HoDem = canbo.HoDem;
+                        //ttCanBo.Ten = canbo.Ten;
+                        //ttCanBo.ChucVuKiemNhiem = canbo.ChucVuKiemNhiem;
+                        //ttCanBo.DienThoaiCQ = canbo.DienThoaiCQ;
+                        //ttCanBo.DienThoaiDD = canbo.DTDD;
+                        //ttCanBo.Email = canbo.Email;
+                        //ttCanBo.SoTaiKhoan = canbo.SoTaiKhoan;
+                        //ttCanBo.ID_NganHang = canbo.IDNganHang;
+                        //ttCanBo.SoCMND = canbo.SoCMND;
+                        //ttCanBo.NgayCapCMND = canbo.NgayCapCMND;
+                        //ttCanBo.NoiCapCMND = canbo.NoiCapCMND;
+                        //ttCanBo.HoTenKhaiSinh = canbo.HoVaTenKhaiSinh;
+                        //ttCanBo.GioiTinh = canbo.GioiTinh;
+                        //ttCanBo.NgaySinh = canbo.NgaySinh;
+                        //ttCanBo.NoiSinh = canbo.NoiSinh;
+                        //ttCanBo.QueQuan_DiaChi = canbo.QueQuan;
+                        //ttCanBo.ThuongTru = canbo.ThuongTru;
+                        //ttCanBo.TamTru = canbo.TamTru;
+                        //ttCanBo.ID_DanToc = (short)canbo.ID_DanToc;
+                        //ttCanBo.ID_TonGiao = (short)canbo.ID_TonGiao;
+
+                        //ttCanBo.NgayVaoCongTy = canbo.NgayVaoCongTy;
+                        //ttCanBo.NgayVaoNganh = canbo.NgayVaoNganh;
+                        //ttCanBo.NgayThoiViec = canbo.NgayThoiViec;
+                        //ttCanBo.TrinhDoVanHoa = canbo.TrinhDoVanHoa;
+                        //ttCanBo.TrinhDoDaoTaoChiTiet = canbo.TrinhDoDaoTaoChiTiet;
+                        //ttCanBo.TrinhDoTinHoc = canbo.TrinhDoTinHoc;
+                        ////ttCanBo.ID_TinhTrangHonNhan = (short)int.Parse(canbo.TinhTrangHonNhan);
+                        //db.CanBos.InsertOnSubmit(ttCanBo);
+                        //db.SubmitChanges();
+
+
+
+                         ttCanBo = new CanBo();
                         ttCanBo.MaCanBo = canbo.MaCanBo;
-                        ttCanBo.MaThe = canbo.MaThe;
-                        ttCanBo.ChiMucHoSoGoc = canbo.ChiMucHoSoGoc;
                         ttCanBo.HoDem = canbo.HoDem;
                         ttCanBo.Ten = canbo.Ten;
-                        ttCanBo.ChucVuKiemNhiem = canbo.ChucVuKiemNhiem;
-                        ttCanBo.DienThoaiCQ = canbo.DienThoaiCQ;
-                        ttCanBo.DienThoaiDD = canbo.DTDD;
-                        ttCanBo.Email = canbo.Email;
-                        ttCanBo.SoTaiKhoan = canbo.SoTaiKhoan;
-                        ttCanBo.ID_NganHang = canbo.IDNganHang;
-                        ttCanBo.SoCMND = canbo.SoCMND;
-                        ttCanBo.NgayCapCMND = canbo.NgayCapCMND;
-                        ttCanBo.NoiCapCMND = canbo.NoiCapCMND;
-                        ttCanBo.HoTenKhaiSinh = canbo.HoVaTenKhaiSinh;
                         ttCanBo.GioiTinh = canbo.GioiTinh;
                         ttCanBo.NgaySinh = canbo.NgaySinh;
                         ttCanBo.NoiSinh = canbo.NoiSinh;
+                        ttCanBo.ID_DanToc = (short)canbo.ID_DanToc;
+                        ttCanBo.ID_TonGiao = (short)canbo.ID_TonGiao;
                         ttCanBo.QueQuan_DiaChi = canbo.QueQuan;
                         ttCanBo.ThuongTru = canbo.ThuongTru;
                         ttCanBo.TamTru = canbo.TamTru;
-                        ttCanBo.ID_DanToc = (short)canbo.ID_DanToc;
-                        ttCanBo.ID_TonGiao = (short)canbo.ID_TonGiao;
-
                         ttCanBo.NgayVaoCongTy = canbo.NgayVaoCongTy;
-                        ttCanBo.NgayVaoNganh = canbo.NgayVaoNganh;
-                        ttCanBo.NgayThoiViec = canbo.NgayThoiViec;
-                        ttCanBo.TrinhDoVanHoa = canbo.TrinhDoVanHoa;
-                        ttCanBo.TrinhDoDaoTaoChiTiet = canbo.TrinhDoDaoTaoChiTiet;
-                        ttCanBo.TrinhDoTinHoc = canbo.TrinhDoTinHoc;
-                        //ttCanBo.ID_TinhTrangHonNhan = (short)int.Parse(canbo.TinhTrangHonNhan);
-                        db.CanBos.InsertOnSubmit(ttCanBo);
+                        ttCanBo.NhomMau = canbo.NhomMau;
+                         db.CanBos.InsertOnSubmit(ttCanBo);
                         db.SubmitChanges();
+
+                        // ??? Phải lấy được CanBo_ID
+                        // var ttCanBMax = db.CanBos.FirstOrDefault(p => p.MaCanBo == canbo.MaCanBo);
                     }
                     //catch (Exception ex)
                     //{
@@ -549,9 +621,8 @@ namespace ImportDuLieuCanBo_VMS
                     //}
                     finally { }
 
-                }
-
-
+               // }
+                var ttCanBoMax = db.CanBos.FirstOrDefault(p => p.MaCanBo == canbo.MaCanBo);
                 if (err != "")
                 {
                     importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Lỗi khi cập nhật thông tin giao tiếp: \"{0}\"", err) });
@@ -559,79 +630,79 @@ namespace ImportDuLieuCanBo_VMS
                     continue;
                 }
                 #endregion
-                #region CanBoDang
-                if (importWorker.CancellationPending)
-                {
-                    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Kết thúc Import thư mục: \"{0}\"", item.Text) });
-                    break;
-                }
+                //#region CanBoDang
+                //if (importWorker.CancellationPending)
+                //{
+                //    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Kết thúc Import thư mục: \"{0}\"", item.Text) });
+                //    break;
+                //}
 
-                importWorker.ReportProgress(0, new string[] { item.Text, "status-away.png", string.Format("Lưu thông tin đảng") });
+                //importWorker.ReportProgress(0, new string[] { item.Text, "status-away.png", string.Format("Lưu thông tin đảng") });
 
-                try
-                {
-                    var bc = db.CanBoDangs.FirstOrDefault(p => p.CanBo_ID == int.Parse(canbo.CanBo_ID));
-                    if (bc == null)
-                    {
-                        bc = new CanBoDang { CanBo_ID = int.Parse(canbo.CanBo_ID) };
+                //try
+                //{
+                //    var bc = db.CanBoDangs.FirstOrDefault(p => p.CanBo_ID == int.Parse(canbo.CanBo_ID));
+                //    if (bc == null)
+                //    {
+                //        bc = new CanBoDang { CanBo_ID = int.Parse(canbo.CanBo_ID) };
 
-                        db.CanBoDangs.InsertOnSubmit(bc);
-                    }
+                //        db.CanBoDangs.InsertOnSubmit(bc);
+                //    }
 
-                    bc.NgayVaoDang = canbo.NgayVaoDang;
+                //    bc.NgayVaoDang = canbo.NgayVaoDang;
 
-                    db.SubmitChanges();
-                }
-                catch (Exception ex)
-                {
-                    if (db.Transaction != null) db.Transaction.Rollback();
-                    err = ex.Message;
-                }
+                //    db.SubmitChanges();
+                //}
+                //catch (Exception ex)
+                //{
+                //    if (db.Transaction != null) db.Transaction.Rollback();
+                //    err = ex.Message;
+                //}
 
-                if (err != "")
-                {
-                    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Lỗi khi cập nhật thông tin Đảng: \"{0}\"", err) });
-                    err = "";
-                    continue;
-                }
-                #endregion
-                #region CanBoThamGiaQuanDoi
-                if (importWorker.CancellationPending)
-                {
-                    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Kết thúc Import thư mục: \"{0}\"", item.Text) });
-                    break;
-                }
+                //if (err != "")
+                //{
+                //    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Lỗi khi cập nhật thông tin Đảng: \"{0}\"", err) });
+                //    err = "";
+                //    continue;
+                //}
+                //#endregion
+                //#region CanBoThamGiaQuanDoi
+                //if (importWorker.CancellationPending)
+                //{
+                //    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Kết thúc Import thư mục: \"{0}\"", item.Text) });
+                //    break;
+                //}
 
-                importWorker.ReportProgress(0, new string[] { item.Text, "status-away.png", string.Format("Lưu thông tin tham gia quân đội") });
+                //importWorker.ReportProgress(0, new string[] { item.Text, "status-away.png", string.Format("Lưu thông tin tham gia quân đội") });
 
-                try
-                {
-                    var bc = db.CanBoThamGiaQuanDois.FirstOrDefault(p => p.CanBo_ID == int.Parse(canbo.CanBo_ID));
-                    if (bc == null)
-                    {
-                        bc = new CanBoThamGiaQuanDoi { CanBo_ID = int.Parse(canbo.CanBo_ID) };
+                //try
+                //{
+                //    var bc = db.CanBoThamGiaQuanDois.FirstOrDefault(p => p.CanBo_ID == int.Parse(canbo.CanBo_ID));
+                //    if (bc == null)
+                //    {
+                //        bc = new CanBoThamGiaQuanDoi { CanBo_ID = int.Parse(canbo.CanBo_ID) };
 
-                        db.CanBoThamGiaQuanDois.InsertOnSubmit(bc);
-                    }
+                //        db.CanBoThamGiaQuanDois.InsertOnSubmit(bc);
+                //    }
 
-                    bc.NgayNhapNgu = canbo.NgayNhapNgu;
-                    bc.NgayXuatNgu = canbo.NgayXuatNgu;
+                //    bc.NgayNhapNgu = canbo.NgayNhapNgu;
+                //    bc.NgayXuatNgu = canbo.NgayXuatNgu;
 
-                    db.SubmitChanges();
-                }
-                catch (Exception ex)
-                {
-                    if (db.Transaction != null) db.Transaction.Rollback();
-                    err = ex.Message;
-                }
+                //    db.SubmitChanges();
+                //}
+                //catch (Exception ex)
+                //{
+                //    if (db.Transaction != null) db.Transaction.Rollback();
+                //    err = ex.Message;
+                //}
 
-                if (err != "")
-                {
-                    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Lỗi khi cập nhật thông tin tham gia quân đội: \"{0}\"", err) });
-                    err = "";
-                    continue;
-                }
-                #endregion
+                //if (err != "")
+                //{
+                //    importWorker.ReportProgress(0, new string[] { item.Text, "status-busy.png", string.Format("Lỗi khi cập nhật thông tin tham gia quân đội: \"{0}\"", err) });
+                //    err = "";
+                //    continue;
+                //}
+                //#endregion
                 #endregion
                 #region Import QuaTrinhCongTac
                 if (importWorker.CancellationPending)
@@ -656,14 +727,18 @@ namespace ImportDuLieuCanBo_VMS
                             startRow++;
                             continue;
                         }
-
-                        if (cells["A" + startRow].StringValue + "" != "")
+                        
+                        //??? ĐÚng là cái này cũng khó cho em. Khó về mặt kỹ thuật (Có cả linq)
+                        // Nhưng mấu chốt, anh muốn em nhìn ra cái logic của vấn đề, qua đó tìm ra cái mình chưa hiểu
+                        // Nếu có quá trình công tác ID thì lọc theo quá trình công tác
+                        if (cells["A" + startRow].StringValue + "" != "" && checkDigit(cells["A" + startRow].StringValue.ToString()))
                         {
                             var id = cells["A" + startRow].IntValue;
                             bc = db.CanBo_QuaTrinhCongTacs.FirstOrDefault(p => p.CanBo_QuaTrinhCongTac_ID == id);
                         }
                         else
                         {
+                            // Nếu không thì lọc theo CanBoID ở trên
                             bc = db.CanBo_QuaTrinhCongTacs.FirstOrDefault(p => p.TuNgay == cells["F" + startRow].StringValue && p.ID_CanBo == int.Parse(canbo.CanBo_ID)) ??
                                  new CanBo_QuaTrinhCongTac { CanBo_QuaTrinhCongTac_ID = 0, ID_CanBo = int.Parse(canbo.CanBo_ID) };
                         }
@@ -720,7 +795,9 @@ namespace ImportDuLieuCanBo_VMS
 
                         try
                         {
+                            db.CanBo_QuaTrinhCongTacs.InsertOnSubmit(bc);
                             db.SubmitChanges();
+                            
                         }
                         catch
                         {
@@ -757,7 +834,7 @@ namespace ImportDuLieuCanBo_VMS
                     if (db.Transaction != null) db.Transaction.Rollback();
                     continue;
                 }
-
+                return;
                 #endregion
                 #region Import BangCap
                 if (importWorker.CancellationPending)
